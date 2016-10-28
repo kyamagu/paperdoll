@@ -12,17 +12,42 @@ use the parser or to run an experiment.
 
 To parse a new image using a pre-trained models, only download the model file (Caution: ~70GB).
 
-    $ cd paperdoll-v1.0/
-    $ wget http://vision.cs.stonybrook.edu/~kyamagu/paperdoll/models-v1.0.tar
-    $ tar xvf models-v1.0.tar
-    $ rm models-v1.0.tar
+    cd paperdoll-v1.0/
+    for i in 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14
+    do
+      wget http://vision.is.tohoku.ac.jp/~kyamagu/paperdoll/models-v1.0.tar.$i
+    done
 
-To run an experiment from scratch, download the dataset.
+Check the MD5SUM to make sure download is successful.
 
-    $ cd paperdoll-v1.0/
-    $ wget http://vision.cs.stonybrook.edu/~kyamagu/paperdoll/data-v1.0.tar
-    $ tar xvf data-v1.0.tar
-    $ rm data-v1.0.tar
+    md5sum -b models-v1.0.tar.*
+
+    3f14f5d90e4c3c3ce014311dce0df1bf *models-v1.0.tar.00
+    46bb5d046dc6f9a6e6cb3c9832ab4c6d *models-v1.0.tar.01
+    85f089dd4a589e02fe5da1fb16b7dbae *models-v1.0.tar.02
+    b0f0d18bd9ec13fbc6c63e0a1fd6356d *models-v1.0.tar.03
+    1b7838c2d4c8287f900992f3e7969f9c *models-v1.0.tar.04
+    5e7f9c7a87e3cc753b4508daa65c247a *models-v1.0.tar.05
+    e7ae269f42e1b7bdf30f9cac3b7ea62a *models-v1.0.tar.06
+    96c92e94ae179fd805f731da65636604 *models-v1.0.tar.07
+    b3c5f7a89a78a7dc60ee57641b6297e9 *models-v1.0.tar.08
+    0371ddec6c5ce04cf185f30cfd8e92ce *models-v1.0.tar.09
+    e9b7a90856b58d7d47f5f28902ccc561 *models-v1.0.tar.10
+    6ced6bf6292c3893cc4ba429ac4617b8 *models-v1.0.tar.11
+    57d4b0617d984c767b4617da2e44158f *models-v1.0.tar.12
+    1ee83b90fd49b0fe4310c89ceaf69a17 *models-v1.0.tar.13
+    7db0e3291730e53ffed526144c2c8e10 *models-v1.0.tar.14
+
+If files are clean, unarchive.
+
+    cat models-v1.0.tar.* | tar xf -
+
+To run an experiment from scratch, download the training data.
+
+    cd paperdoll/
+    wget http://vision.is.tohoku.ac.jp/~kyamagu/paperdoll/data-v1.0.tar
+    tar xvf data-v1.0.tar
+    rm data-v1.0.tar
 
 Contents
 --------
@@ -102,7 +127,7 @@ This will automatically call `startup` to initialize necessary environment.
 
     >> load data/paperdoll_pipeline.mat config;
     >> input_image = imread('/path/to/new_image.jpg');
-    >> input_sample = struct('image', imencode(input_image, 'jpg')); 
+    >> input_sample = struct('image', imencode(input_image, 'jpg'));
     >> result = feature_calculator.apply(config, input_sample)
 
 The result is a struct with the following fields.
@@ -263,6 +288,6 @@ variable:
 License
 -------
 
-The PaperDoll codes are distributed under BSD license. However, some of the 
+The PaperDoll codes are distributed under BSD license. However, some of the
 dependent libraries in `lib/` might be protected by other license. Check each
 directory for detail.
