@@ -5,7 +5,7 @@ function make(varargin)
 %
   root_dir = fileparts(fileparts(mfilename('fullpath')));
   cwd = cd(root_dir);
-  cmd = sprintf('mex -outdir %s -o segment segment-mex.cpp', fullfile(root_dir, '+pf'));
+  cmd = sprintf('mex -outdir %s -output segment segment-mex.cpp', fullfile(root_dir, '+pf'));
   disp(cmd);
   eval(cmd);
   cd(cwd);
