@@ -11,7 +11,7 @@ function compile
   % 2) mulththreaded convolution without blas
   % mex -O fconvMT.cc -o fconv 
   % 3) basic convolution, very compatible
-  mex -O fconv.cc -o fconv
+  mex -O fconv.cc -output fconv
 
   mex -O resize.cc
   mex -O reduce.cc
