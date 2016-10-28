@@ -4,7 +4,7 @@ function make(varargin)
   libsvm.make();
   pose.compile();
   mr8.make();
-  cv.make();
+  mexopencv.make();
   vl_make();
   bdb.make(varargin{:});
   GCO_BuildLib;

@@ -6,6 +6,7 @@
  */
 #include <typeinfo>
 #include "mexopencv.hpp"
+
 using namespace std;
 using namespace cv;
 
@@ -207,6 +208,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
     int id = rhs[0].toInt();
     string method = rhs[1].toString();
 
+
+
+    
     // Big operation switch
     if (method == "new") {
         nargchk(nrhs>=3);

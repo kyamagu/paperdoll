@@ -6,6 +6,7 @@
  */
 #include <typeinfo>
 #include "mexopencv.hpp"
+
 using namespace std;
 using namespace cv;
 
@@ -100,6 +101,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
     if (nrhs<1 || nlhs>1)
         mexErrMsgIdAndTxt("mexopencv:error","Wrong number of arguments");
 
+
+
+    
     // Determine argument format between constructor or (id,method,...)
     vector<MxArray> rhs(prhs,prhs+nrhs);
     int id = 0;
