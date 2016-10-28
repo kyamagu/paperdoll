@@ -12,7 +12,7 @@ use the parser or to run an experiment.
 
 To parse a new image using a pre-trained models, only download the model file (Caution: ~70GB).
 
-    cd paperdoll-v1.0/
+    cd paperdoll/
     for i in 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14
     do
       wget http://vision.is.tohoku.ac.jp/~kyamagu/paperdoll/models-v1.0.tar.$i
@@ -65,7 +65,7 @@ Contents
 Build
 -----
 
-The software is designed and tested using Ubuntu 12.04.
+The software is designed and tested using Ubuntu 12.04 LTS.
 
 The following are the prerequisites for clothing parser.
 
