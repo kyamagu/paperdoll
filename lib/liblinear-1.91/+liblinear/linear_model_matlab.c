@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../linear.h"
+#include "linear_model_matlab.h"
 
 #include "mex.h"
 
