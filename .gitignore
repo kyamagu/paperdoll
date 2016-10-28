@@ -1,0 +1,6 @@
+*~
+.DS_Store
+*.o
+*.a
+*.mex*
+log/*.log

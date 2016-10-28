@@ -1,0 +1,53 @@
+function config = create( varargin )
+%CREATE Create a new calculator configuration.
+%
+% The knn_retriever requires pre-computed descriptors, sample ids, and tagging
+% data. This must be saved in a matfile which can be spacified by
+% 'StyleDescriptor2sFile'. This file should contain 'sample_ids', 'descriptors',
+% 'tags', and 'taggings'.
+%
+
+  DESCRIPTOR_FILE = 'data/paperdoll_descriptors.mat';
+
+  config = struct(...
+    'name',          'knn_retriever', ...
+    'input',         'style_descriptor2', ...
+    'annotation',    'tagging', ...
+    'output',        'knn_retrieved_ids', ...
+    'output_labels', 'knn_predicted_labels', ...
+    'taggings',      [], ...
+    'tags',          [], ...
+    'sample_ids',    [], ...
+    'descriptors',   [], ...
+    'kdtree',        [], ...
+    'num_neighbors', 25, ...
+    'target_recall', 0.5, ...
+    'threshold',     0.157035 ... % Recall = 0.5 in training data.
+    );
+
+  for i = 1:2:numel(varargin)
+    switch varargin{i}
+      case 'Input',        config.input = varargin{i+1};
+      case 'InputLabels',  config.input_labels = varargin{i+1};
+      case 'Output',       config.output = varargin{i+1};
+      case 'OutputLabels', config.output_labels = varargin{i+1};
+      case 'NumNeighbors', config.num_neighbors = varargin{i+1};
+      case 'DescriptorFile', DESCRIPTOR_FILE = varargin{i+1};
+    end
+  end
+
+  assert(exist(DESCRIPTOR_FILE, 'file') > 0, ...
+         'Descriptor file not found: %s', DESCRIPTOR_FILE);
+  DESCRIPTOR_FILE = load(DESCRIPTOR_FILE);
+  config.taggings = DESCRIPTOR_FILE.taggings;
+  config.tags = DESCRIPTOR_FILE.tags;
+  config.sample_ids = DESCRIPTOR_FILE.sample_ids;
+  config.descriptors = single(DESCRIPTOR_FILE.descriptors');
+
+  logger('Building KD-tree for %d of %d-d vectors.', ...
+         size(config.descriptors, 2), ...
+         size(config.descriptors, 1));
+  config.kdtree = vl_kdtreebuild(config.descriptors);
+
+end
+

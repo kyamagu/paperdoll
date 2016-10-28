@@ -1,0 +1,23 @@
+function config = create(varargin)
+%CREATE Create a new calculator configuration.
+
+  config = struct( ...
+    'name', 'inverse_warp_calculator', ...
+    'input_image', {{'labeling'}},...
+    'input_pose',  'pose', ...
+    'input_image_size', 'image_size', ...
+    'output', {{'warped_labeling'}}, ...
+    'padding',    10 ...
+  );
+  for i = 1:2:numel(varargin)
+    switch varargin{i}
+      case 'InputImage', config.input_image = varargin{i+1};
+      case 'InputPose',  config.input_pose = varargin{i+1};
+      case 'InputImageSize',  config.input_image_size = varargin{i+1};
+      case 'Output',     config.output = varargin{i+1};
+      case 'Padding',    config.padding = varargin{i+1};
+    end
+  end
+
+end
+

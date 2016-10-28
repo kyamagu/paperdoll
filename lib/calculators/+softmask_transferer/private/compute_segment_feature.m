@@ -1,0 +1,63 @@
+function [segmentation, segment_geometry, segment_bows] = ...
+    compute_segment_feature(config, sample)
+%COMPUTE_SEGMENT_FEATURE Compute segmentation and corresponding region features.
+  input_image = imread_or_decode(sample.(config.input_image), 'jpg');
+  if size(input_image, 3) == 1
+    input_image = repmat(input_image, [1,1,3]);
+  end
+  segmentation = pf.segment(input_image, ...
+                            config.pf_sigma_smooth, ...
+                            config.pf_k_threshold, ...
+                            config.pf_min_size);
+  % Compute geometry feature for each segment.
+  pose_map = sample.(config.input_pose_map);
+  image_size = size(pose_map);
+  pose_map = reshape(pose_map, prod(image_size(1:2)), image_size(3));
+  segment_geometry = compute_geometry(segmentation(:), pose_map);
+  % Compute appearance features for each segment.
+  segment_bows = cell(1, numel(config.input));
+  for i = 1:numel(config.input)
+    dense_feature = sample.(config.input{i});
+    image_size = size(dense_feature);
+    dense_feature = reshape(dense_feature,...
+                            prod(image_size(1:2)), ...
+                            image_size(3));
+    visual_words = kmeans_quantizer2.project(config.quantizers(i), ...
+                                             dense_feature, ...
+                                             'OutputIndices', true);
+    segment_bows{i} = compute_bow(config, segmentation(:), visual_words(:));
+  end
+  % Result is an array of num_segments by bow_size.
+  segment_bows = cat(2, segment_bows{:});
+end
+
+function segment_geometry = compute_geometry(segmentation, pose_map)
+%COMPUTE_GEOMETRY Compute geometric feature for each segment. Mean pooling.
+  segment_geometry = accumarray(...
+    [double(segmentation), ones(numel(segmentation), 1)], ...
+    1:size(pose_map,1),...
+    [numel(segmentation), 1], ...
+    @(x){mean(pose_map(x, :),1)});
+  segment_geometry = cat(1, segment_geometry{:});
+end
+
+function segment_bows = compute_bow(config, segmentation, visual_words)
+%COMPUTE_BOW For each segment, compute bag of words. Normal histogram.
+  segment_bows = accumarray(...
+    [double(segmentation), ones(numel(segmentation), 1)], ...
+    visual_words, ...
+    [numel(segmentation), 1], ...
+    @(x){compute_normalized_histogram(x, config.num_visual_words)});
+  segment_bows = single(cat(1, segment_bows{:}));
+end
+
+function normalized_histogram = compute_normalized_histogram(values, ...
+                                                             num_visual_words)
+%COMPUTE_NORMALIZED_HISTOGRAM Compute normal histogram for the given bin size.
+  normalized_histogram = accumarray([ones(numel(values), 1), values(:)], ...
+                                    1, ...
+                                    [1, num_visual_words]);
+  if any(normalized_histogram)
+    normalized_histogram = normalized_histogram / sum(normalized_histogram);
+  end
+end

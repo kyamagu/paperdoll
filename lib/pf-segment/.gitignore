@@ -1,0 +1,4 @@
+segment
+*.mex*
+*~
+.DS_Store
