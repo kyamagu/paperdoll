@@ -25,9 +25,9 @@ map<int,Ptr<DescriptorExtractor> > obj_;
 void mexFunction( int nlhs, mxArray *plhs[],
                   int nrhs, const mxArray *prhs[] )
 {
-    if (nrhs<1 || nlhs>1)
+    if (nrhs<1 || nlhs>2)
         mexErrMsgIdAndTxt("mexopencv:error","Wrong number of arguments");
-    
+
     // Determine argument format between constructor or (id,method,...)
     vector<MxArray> rhs(prhs,prhs+nrhs);
     int id = 0;
@@ -70,6 +70,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
         vector<KeyPoint> keypoints(rhs[3].toVector<KeyPoint>());
         obj->compute(image, keypoints, descriptors);
         plhs[0] = MxArray(descriptors);
+        if (nlhs>1)
+            plhs[1] = MxArray(keypoints);
     }
     else if (method == "read") {
         if (nrhs!=3 || nlhs!=0)

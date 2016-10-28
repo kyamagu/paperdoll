@@ -94,6 +94,23 @@ Ptr<flann::IndexParams> createIndexParams(const MxArray& m)
         p = new flann::CompositeIndexParams(trees,
             branching, iterations, centers_init, cb_index);
     }
+    else if (type == "LSH") {
+        unsigned int table_number = 20;
+        unsigned int key_size = 15;
+        unsigned int multi_probe_level = 0;
+        for (int i=1; i<rhs.size(); i+=2) {
+            string key(rhs[i].toString());
+            if (key == "TableNumber")
+                table_number = rhs[i+1].toInt();
+            else if (key == "KeySize")
+                key_size = rhs[i+1].toInt();
+            else if (key == "MultiProbeLevel")
+                multi_probe_level = rhs[i+1].toInt();
+            else
+                mexErrMsgIdAndTxt("mexopencv:error","Unrecognized option");
+        }
+        p = new flann::LshIndexParams(table_number, key_size, multi_probe_level);
+    }
     else if (type == "Autotuned") {
         float target_precision = 0.9;
         float build_weight = 0.01;
@@ -120,7 +137,7 @@ Ptr<flann::IndexParams> createIndexParams(const MxArray& m)
             mexErrMsgIdAndTxt("mexopencv:error","Missing filename");
         string filename(rhs[1].toString());
         p = new flann::SavedIndexParams(filename);
-        if (p==NULL)
+        if (p.empty())
             mexErrMsgIdAndTxt("mexopencv:error","Failed to load index");
     }
     else
@@ -164,9 +181,9 @@ Ptr<DescriptorMatcher> createFlannBasedMatcher(const vector<MxArray>& rhs)
         else
             mexErrMsgIdAndTxt("mexopencv:error","Unrecognized option");
     }
-    if (indexParams==NULL)
+    if (indexParams.empty())
         indexParams = new flann::KDTreeIndexParams();
-    if (searchParams==NULL)
+    if (searchParams.empty())
         searchParams = new flann::SearchParams();
     return Ptr<DescriptorMatcher>(new FlannBasedMatcher(indexParams,searchParams));
 }
@@ -189,7 +206,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     vector<MxArray> rhs(prhs,prhs+nrhs);
     int id = rhs[0].toInt();
     string method = rhs[1].toString();
-    
+
     // Big operation switch
     if (method == "new") {
         nargchk(nrhs>=3);
@@ -273,7 +290,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
         nargchk(nrhs>=4);
         Mat queryDescriptors((rhs[2].isUint8()) ? rhs[2].toMat() : rhs[2].toMat(CV_32F));
         vector<vector<DMatch> > matches;
-        if (nrhs>=5 && rhs[3].isNumeric()) { // First format
+        if (nrhs>=5 && rhs[3].isNumeric() && rhs[4].isNumeric()) { // First format
             nargchk((nrhs%2)==1);
             Mat trainDescriptors((rhs[3].isUint8()) ? rhs[3].toMat() : rhs[3].toMat(CV_32F));
             int k = rhs[4].toInt();
@@ -313,13 +330,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
         nargchk(nrhs>=4);
         Mat queryDescriptors((rhs[2].isUint8()) ? rhs[2].toMat() : rhs[2].toMat(CV_32F));
         vector<vector<DMatch> > matches;
-        if (nrhs>=5 && rhs[3].isNumeric()) { // First format
+        if (nrhs>=5 && rhs[3].isNumeric() && rhs[4].isNumeric()) { // First format
+            nargchk((nrhs%2)==1);
             Mat trainDescriptors((rhs[3].isUint8()) ? rhs[3].toMat() : rhs[3].toMat(CV_32F));
             float maxDistance = rhs[4].toDouble();
             Mat mask;
             bool compactResult=false;
             for (int i=5; i<nrhs; i+=2) {
-                nargchk((nrhs%2)==1);
                 string key(rhs[i].toString());
                 if (key=="Mask")
                     mask = rhs[i+1].toMat(CV_8U);
