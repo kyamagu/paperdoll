@@ -9,7 +9,11 @@ typedef int mwSize;
 typedef int mwIndex;
 #endif
 
-extern "C" mxArray *mxCreateReference(const mxArray*); // undocumented mex function
+namespace matrix{ namespace detail{ namespace noninlined{ namespace mx_array_api{
+#define EXTERN_C extern
+EXTERN_C mxArray *mxCreateReference(const mxArray*); // undocumented mex function
+}}}}
+using namespace matrix::detail::noninlined::mx_array_api;
 
 #define GCO_EXPORT(func) \
 	extern "C" void func(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]); \

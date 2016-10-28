@@ -50,7 +50,7 @@ if (~Options.Force && exist('gco_matlab')==3)
 end
 clear gco_matlab;
 
-mexcmd = ['mex ' MEXFLAGS ' -outdir ''' OUTDIR ''' -output ' LIB_NAME ' ' ];
+mexcmd = ['mex -v ' ' -outdir ''' OUTDIR ''' -output ' LIB_NAME ' ' ];
 
 % Append all source file names to the MEX command string
 SRCCPP = { 
@@ -61,7 +61,7 @@ SRCCPP = {
     [GCODIR filesep 'LinkedBlockList.cpp']
     };
 for f=1:length(SRCCPP)
-    mexcmd = [mexcmd ' ''' SRCCPP{f} ''' '];
+    mexcmd = [mexcmd ' ''' SRCCPP{f} ''' ' MEXFLAGS];
 end
 
 eval(mexcmd);  % compile and link in one step
