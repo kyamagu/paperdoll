@@ -11,11 +11,27 @@
 
 using mex::MxArray;
 
-/// Hidden MEX API for encoding.
-EXTERN_C mxArray* mxSerialize(const mxArray*);
+// MX_API_VER has unfortunately not changed between R2013b and R2014a,
+// so we use the new MATRIX_DLL_EXPORT_SYM as an ugly hack instead
+//
+#if defined(__cplusplus) && defined(MATRIX_DLL_EXPORT_SYM)
+  #define EXTERN_C extern
+  namespace matrix{
+    namespace detail{
+      namespace noninlined{
+        namespace mx_array_api{
+#endif
 
-/// Hidden MEX API for decoding.
-EXTERN_C mxArray* mxDeserialize(const void*, size_t);
+EXTERN_C mxArray* mxSerialize(mxArray const *);
+EXTERN_C mxArray* mxDeserialize(const void *, size_t);
+
+#if defined(__cplusplus) && defined(MATRIX_DLL_EXPORT_SYM)
+        }
+      }
+    }
+  }
+  using namespace matrix::detail::noninlined::mx_array_api;
+#endif
 
 namespace mex {
 
@@ -295,7 +311,7 @@ bool Database::del(const mxArray* key,
                    uint32_t flags,
                    Transaction* transaction) {
   Record record(key);
-  code_ = database_->del(database_, 
+  code_ = database_->del(database_,
                          (transaction == NULL) ? NULL : transaction->get(),
                          record.key(),
                          flags);
@@ -360,6 +376,30 @@ bool Database::stat(uint32_t flags,
       free(stats);
       break;
     }
+    // case DB_HEAP: {
+    //   DB_HEAP_STAT* stats;
+    //   code_ = database_->stat(database_,
+    //                           (transaction == NULL) ? NULL : transaction->get(),
+    //                           &stats,
+    //                           flags);
+    //   if (output != NULL) {
+    //     const char* kFields[] = {
+    //         "magic", "version", "nrecs", "pagecnt", "pagesize", "nregions",
+    //         "regionsize"
+    //         };
+    //     MxArray output_data = MxArray::Struct(7, kFields);
+    //     output_data.set(kFields[0], double(stats->heap_magic));
+    //     output_data.set(kFields[1], double(stats->heap_version));
+    //     output_data.set(kFields[2], double(stats->heap_nrecs));
+    //     output_data.set(kFields[3], double(stats->heap_pagecnt));
+    //     output_data.set(kFields[4], double(stats->heap_pagesize));
+    //     output_data.set(kFields[5], double(stats->heap_nregions));
+    //     output_data.set(kFields[6], double(stats->heap_regionsize));
+    //     *output = output_data.getMutable();
+    //   }
+    //   free(stats);
+    //   break;
+    // }
     case DB_BTREE:
     case DB_RECNO: {
       DB_BTREE_STAT* stats;
