@@ -3,7 +3,8 @@ function vl_make
 
   cwd = pwd;
   cd(fileparts(mfilename('fullpath')));
-  cmd = sprintf('make ARCH=%s MEX=%s', computer('arch'), fullfile(matlabroot,'bin','mex'));
+  cmd = sprintf('make ARCH=%s MEX=%s MATLAB_PATH=%s', computer('arch'), ...
+                fullfile(matlabroot,'bin','mex'), matlabroot);
   system(cmd);
   cd(cwd);
 end
