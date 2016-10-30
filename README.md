@@ -52,7 +52,7 @@ To run an experiment from scratch, download the training data.
 
 ```bash
 cd paperdoll/
-wget http://vision.is.tohoku.ac.jp/~kyamagu/paperdoll/data-v1.0.tar
+wget http://vision.is.tohoku.ac.jp/~kyamagu/research/paperdoll/data-v1.0.tar
 tar xvf data-v1.0.tar
 rm data-v1.0.tar
 ```
