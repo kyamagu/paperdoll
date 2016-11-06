@@ -20,7 +20,7 @@ end
 function [ordered_labeling, ordered_labels] = reorder_labels(labeling, labels)
 %REORDER_LABELS
   reserved_labels = {'null', 'skin', 'hair'};
-  ordered_labels = [reserved_labels, setdiff(labels, reserved_labels)];
+  ordered_labels = [reserved_labels(:); setdiff(labels(:), reserved_labels(:))];
   ordered_labeling = zeros(size(labeling), 'uint8');
   for i = 1:numel(labels)
     ordered_labeling(labeling == i) = find(strcmp(labels{i}, ordered_labels));
