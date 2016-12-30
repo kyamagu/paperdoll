@@ -4,6 +4,7 @@ function make
   cwd = pwd;
   cd(fileparts(mfilename('fullpath')));
   try
+    !make OPTFLAGS=-fPIC -C ../blas
     Type = ver;
     % This part is for OCTAVE
     if(strcmp(Type(1).Name, 'Octave') == 1)
