@@ -30,8 +30,8 @@ the terms of the BSD license (see the COPYING file).
 
 #if (! defined(MX_API_VER) || (MX_API_VER < 0x07030000)) && \
   (! defined(HAVE_OCTAVE))
-typedef vl_uint32 mwSize ;
-typedef vl_int32 mwIndex ;
+typedef size_t mwSize ;
+typedef size_t mwIndex ;
 #endif
 
 /** @brief Access MEX input argument */
