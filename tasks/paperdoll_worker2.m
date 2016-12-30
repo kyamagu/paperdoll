@@ -3,10 +3,9 @@ function paperdoll_worker2
   iptgetpref;
   cd(fileparts(fileparts(mfilename('fullpath'))));
   startup;
-  %options.server = 'http://clothingparsing.com/';
-  options.server = 'http://bvision11.cs.unc.edu/';
+  %options.server = 'http://example.com/';  % Replace me with the real hosting service.
   options.parser_file = fullfile('data', 'paperdoll_pipeline.mat');
-  options.database_file = fullfile('data', 'paperdoll_exemplars_debug.bdb');
+  options.database_file = fullfile('data', 'paperdoll_exemplars_debug.bdb');  % This file is a special database with images.
   options.worker_id = getenv('WORKER_ID');
   options.session_id = [];
   options.work_directory = '';
