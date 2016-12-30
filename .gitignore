@@ -4,3 +4,4 @@
 *.a
 *.mex*
 log/*.log
+.matlab

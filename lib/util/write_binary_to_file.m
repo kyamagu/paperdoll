@@ -1,5 +1,7 @@
 function write_binary_to_file( input, filename )
 %WRITE_BINARY_TO_FILE Write binary data to a file.
+%
+%    write_binary_to_file(input, filename)
 
   try
     fid = fopen(filename, 'w');
