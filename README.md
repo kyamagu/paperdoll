@@ -10,6 +10,21 @@ Unconstrained clothing parser for a full-body picture.
 This package only contains source codes. Download additional data files to
 use the parser or to run an experiment.
 
+Web-scraped data (Update 2018-10-28)
+------------------------------------
+
+We also release the metadata we scraped from Chictopia for academic research.
+[Check the data directory](data/chictopia/).
+
+Related work:
+
+Shuai Zheng, Fan Yang, M. Hadi Kiapour, Robinson Piramuthu. ModaNet: A Large-Scale Street Fashion Dataset with Polygon Annotations. ACM Multimedia, 2018.
+https://github.com/eBay/modanet
+
+
+Getting a pre-trained model
+---------------------------
+
 To parse a new image using a pre-trained models, only download the model file (Caution: ~70GB).
 
 ```bash
@@ -48,7 +63,7 @@ If files are clean, unarchive.
 cat models-v1.0.tar.* | tar xf -
 ```
 
-To run an experiment from scratch, download the training data.
+To run an experiment from scratch, download the training data (without photos).
 
 ```bash
 cd paperdoll/
