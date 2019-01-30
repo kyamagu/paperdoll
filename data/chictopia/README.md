@@ -1,28 +1,73 @@
-Chictopia metadata
-==================
+PaperDoll raw dataset
+=====================
 
-Web-crawled data from Chictopia in Fall 2012. Image data are not included.
+Web-crawled data from Chictopia in Fall 2012.
+
+The use of this dataset is subject to copyright law. We release this dataset
+under [Japanese legislation in effect from Jan 2019](http://eare.eu/japan-amends-tdm-exception-copyright/),
+but the actual law enforcement is subject to the rule of each country.
 
 Contents
 --------
 
     chictopia.sql.gz
+    usage.ipynb
     README.md
 
-Reconstructing SQLite3 database
--------------------------------
+Metadata are stored in chictopia.sql.gz, and images are stored in separate LMDB
+as encoded binaries.
 
-The following command will reconstruct the SQLite3 database file.
+Downloading metadata
+--------------------
+
+Use git to clone this repository. Note Git LFS is used to host metadata file.
+
+    git clone https://github.com/kyamagu/paperdoll
+
+Then navigate to `data/chictopia` dir.
+
+Downloading image data
+----------------------
+
+Download the photo data (~40GB) at either of the following URL:
+
+    wget http://vision.is.tohoku.ac.jp/chictopia2/photos.lmdb.tar
+
+or:
+
+    wget https://s3-ap-northeast-1.amazonaws.com/kyamagu-public/chictopia2/photos.lmdb.tar
+
+MD5SUM is: `a404789687fc3906d7d843942c802f53`.
+
+Then extract the LMDB content:
+
+    tar xf photos.lmdb.tar
+
+Prerequisites
+-------------
+
+The dataset requires SQLite3 and LMDB.
+
+First reconstruct the metadata SQLite3 file. The following command will
+reconstruct the SQLite3 database file.
 
     gunzip -c chictopia.sql.gz | sqlite3 chictopia.sqlite3
 
+Once the file is reconstructed, check [the notebook demo](usage.ipynb) for
+how to handle the data structure.
 
-Getting started
----------------
+Photo data
+----------
 
-Here are a list of major structures in Chictopia. Most external relations are
-represented a name + `_id` field. For example, User-Post relation is stored as
-`user_id` field in posts table.
+LMDB stores raw PNG binary. The key is photo id and the value is binary. See
+[the notebook demo](usage.ipynb) for how to open.
+
+Metadata structure
+------------------
+
+Here is a list of major structures in the SQLite3 tables. Most external
+relations are represented a name + `_id` field. For example, User-Post relation
+is stored as `user_id` field in posts table.
 
 ### User-Posts-Photos relationships
 

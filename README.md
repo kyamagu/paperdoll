@@ -10,17 +10,17 @@ Unconstrained clothing parser for a full-body picture.
 This package only contains source codes. Download additional data files to
 use the parser or to run an experiment.
 
-Web-scraped data (Update 2018-10-28)
+Web-scraped data (Update 2019-01-31)
 ------------------------------------
 
-We also release the metadata we scraped from Chictopia for academic research.
+Thanks to the copyright law in Japan, we decided to release all the raw data we
+scraped from Chictopia for research purposes.
 [Check the data directory](data/chictopia/).
 
 Related work:
 
 Shuai Zheng, Fan Yang, M. Hadi Kiapour, Robinson Piramuthu. ModaNet: A Large-Scale Street Fashion Dataset with Polygon Annotations. ACM Multimedia, 2018.
 https://github.com/eBay/modanet
-
 
 Getting a pre-trained model
 ---------------------------
