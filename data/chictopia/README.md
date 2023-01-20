@@ -33,10 +33,6 @@ Download the photo data (~40GB) at either of the following URL:
 
     wget http://vision.is.tohoku.ac.jp/chictopia2/photos.lmdb.tar
 
-or:
-
-    wget https://s3-ap-northeast-1.amazonaws.com/kyamagu-public/chictopia2/photos.lmdb.tar
-
 MD5SUM is: `a404789687fc3906d7d843942c802f53`.
 
 Then extract the LMDB content:
